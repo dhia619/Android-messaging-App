@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">Messenger</string>
+    <string name="Login_Your_Account">Login Your Account</string>
+    <string name="email_input">Email Address</string>
+    <string name="password_input">Password</string>
+    <string name="login">Login</string>
+    <string name="desc">or continue with</string>
+    <string name="sign_in">Sign in</string>
+    <string name="redirection_desc">Don\'t have an account ?</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="image_button_description">Description of the image button</string>
 </resources>
