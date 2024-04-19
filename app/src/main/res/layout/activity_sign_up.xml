@@ -21,13 +21,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_bold"
                 android:text="Create An Account"
                 android:textAlignment="center"
                 android:textColor="@color/white"
-                android:textSize="40dp" />
+                android:textSize="30dp" />
 
             <!-- zone pour importation d'image de profile -->
             <FrameLayout
@@ -43,9 +45,10 @@
                     android:text="Select profile image"
                     android:textAlignment="center"
                     android:gravity="center_vertical"
-                    android:textSize="20dp"
-                    android:layout_marginVertical="10dp"
-                    android:textColor="@color/primary_dark"/>
+                    android:textSize="18dp"
+                    android:layout_marginVertical="5dp"
+                    android:textColor="@color/primary_dark"
+                    android:fontFamily="@font/poppins"/>
                 <ImageView
                     android:id="@+id/imageView"
                     android:layout_width="match_parent"
@@ -65,14 +68,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Full Name"
-                android:textColorHint="@color/placeholder_text_color">
+                android:textColorHint="@color/placeholder_text_color"
+                app:boxBackgroundColor="@color/input_background"
+                app:boxBackgroundMode="outline"
+                app:boxStrokeColor="@color/white"
+                app:cursorColor="@color/white"
+                app:hintTextColor="@color/primary_green"
+                app:startIconDrawable="@drawable/name_ico">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/fullnameField"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/input_background"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    android:fontFamily="@font/poppins"
+                    android:inputType="text"/>
 
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -81,7 +92,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Email"
-                android:textColorHint="@color/placeholder_text_color">
+                android:textColorHint="@color/placeholder_text_color"
+                app:boxBackgroundColor="@color/input_background"
+                app:boxBackgroundMode="outline"
+                app:boxStrokeColor="@color/white"
+                app:cursorColor="@color/white"
+                app:hintTextColor="@color/primary_green"
+                app:startIconDrawable="@drawable/mail_ico">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/emailField"
@@ -89,7 +106,8 @@
                     android:layout_height="wrap_content"
                     android:background="@color/input_background"
                     android:textColor="@color/white"
-                    android:inputType="textEmailAddress" />
+                    android:inputType="textEmailAddress"
+                    android:fontFamily="@font/poppins"/>
 
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -98,7 +116,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Phone Number"
-                android:textColorHint="@color/placeholder_text_color">
+                android:textColorHint="@color/placeholder_text_color"
+                app:boxBackgroundColor="@color/input_background"
+                app:boxBackgroundMode="outline"
+                app:boxStrokeColor="@color/white"
+                app:cursorColor="@color/white"
+                app:hintTextColor="@color/primary_green"
+                app:startIconDrawable="@drawable/phone_ico">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/phoneField"
@@ -106,7 +130,8 @@
                     android:layout_height="wrap_content"
                     android:background="@color/input_background"
                     android:textColor="@color/white"
-                    android:inputType="phone" />
+                    android:inputType="phone"
+                    android:fontFamily="@font/poppins"/>
 
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -115,7 +140,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Birthday"
-                android:textColorHint="@color/placeholder_text_color">
+                android:textColorHint="@color/placeholder_text_color"
+                app:boxBackgroundColor="@color/input_background"
+                app:boxBackgroundMode="outline"
+                app:boxStrokeColor="@color/white"
+                app:cursorColor="@color/white"
+                app:hintTextColor="@color/primary_green"
+                app:startIconDrawable="@drawable/calendar_ico">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/brthField"
@@ -123,7 +154,8 @@
                     android:layout_height="wrap_content"
                     android:background="@color/input_background"
                     android:textColor="@color/white"
-                    android:inputType="date" />
+                    android:inputType="date"
+                    android:fontFamily="@font/poppins"/>
 
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -131,16 +163,22 @@
                 android:id="@+id/pwdFieldLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Password"
-                android:textColorHint="@color/placeholder_text_color">
+                android:backgroundTint="@color/input_background"
+                android:hint="@string/password_input"
+                android:textColorHint="@color/placeholder_text_color"
+                app:boxBackgroundColor="@color/input_background"
+                app:boxBackgroundMode="outline"
+                app:boxStrokeColor="@color/white"
+                app:cursorColor="@color/white"
+                app:endIconMode="password_toggle"
+                app:hintTextColor="@color/primary_green"
+                app:startIconDrawable="@drawable/lock_ico">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/pwdField"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/input_background"
-                    android:textColor="@color/white"
-                    android:inputType="textPassword"/>
+                    android:inputType="textPassword"
+                    android:textColor="@color/white" />
 
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -153,13 +191,17 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <Button
+                android:id="@+id/sgupButton"
+                style="@style/Widget.MaterialComponents.Button.Icon"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="20dp"
-                android:text="Sign up"
-                android:textSize="16dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="20dp"
                 android:backgroundTint="@color/primary_green"
-                style="@style/Widget.MaterialComponents.Button"/>
+                android:text="Sign up"
+                android:fontFamily="@font/poppins_bold"
+                android:textAllCaps="false"
+                android:textSize="16sp"
+                android:elevation="15dp"/>
             <!-- alternative color text -->
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -171,14 +213,16 @@
                     android:layout_height="wrap_content"
                     android:text="Already have an account?"
                     android:textColor="@color/white"
-                    android:textSize="20dp"/>
+                    android:textSize="20dp"
+                    android:fontFamily="@font/poppins"/>
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Sign in"
                     android:textColor="@color/primary_green"
                     android:textSize="20dp"
-                    android:layout_marginLeft="10dp"/>
+                    android:layout_marginLeft="10dp"
+                    android:fontFamily="@font/poppins"/>
             </LinearLayout>
 
         </LinearLayout>
