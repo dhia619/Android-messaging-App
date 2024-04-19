@@ -144,13 +144,16 @@
                 android:fontFamily="@font/poppins"
                 android:textSize="15sp" />
 
-            <TextView
-                android:layout_width="match_parent"
+            <Button
+                android:id="@+id/sign_in"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:text="@string/sign_in"
                 android:fontFamily="@font/poppins"
+                android:text="@string/sign_in"
+                android:backgroundTint="@color/primary_dark"
                 android:textColor="@color/primary_green"
+                android:clickable="true"
                 android:textSize="15sp" />
         </LinearLayout>
 
