@@ -1,5 +1,6 @@
 package com.example.messenger;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -18,6 +19,22 @@ public class MyDataBase extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+
+    }
+
+    public boolean insertUser(User user){
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("full_name",user.getFull_name());
+        values.put("email",user.getEmail());
+        values.put("phone_number",user.getPhone_number());
+        values.put("image",user.getProfile_image());
+        values.put("birthdate",user.getBirthdate());
+        values.put("pwd",user.getPwd());
+
+        long result = db.insert("user",null,values);
+
+        return result != -1;
 
     }
 }
