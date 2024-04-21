@@ -3,6 +3,7 @@ package com.example.messenger;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.icu.text.SymbolTable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -21,7 +22,7 @@ import android.util.Log;
 public class SignUpActivity extends AppCompatActivity {
 
     User user = new User();
-
+    MyDataBase db = new MyDataBase(this);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,13 +35,18 @@ public class SignUpActivity extends AppCompatActivity {
 
                 //check if user input is valid
                 if (!user.getFull_name().isEmpty() && !user.getEmail().isEmpty() && isValidNewEmail(user.getEmail()) && !user.getPhone_number().isEmpty() && isValidPhone(user.getPhone_number()) && !user.getBirthdate().isEmpty() && isValidBirthdate(user.getBirthdate()) && !user.getPwd().isEmpty() && isValidPassword(user.getPwd())){
-
+                    user.setProfile_image("https://www.youtube.com/watch?v=lHZwlzOUOZ4");
                     //check if user exists
-                    Toast toast = Toast.makeText(getApplicationContext(), "account created successfully", Toast.LENGTH_LONG);
-                    toast.show();
-
-                    Log.d("SignUpActivity", "All input fields are valid");
-
+                    if (db.user_exist(user) == 0){
+                        db.insertUser(user);
+                        Toast toast = Toast.makeText(getApplicationContext(), "account created successfully", Toast.LENGTH_LONG);
+                        toast.show();
+                        System.out.println(db.user_exist(user));
+                    }
+                    else{
+                        Toast toast = Toast.makeText(getApplicationContext(), "user already exists", Toast.LENGTH_LONG);
+                        toast.show();
+                    }
                 }
                 else{
                     Toast toast = Toast.makeText(getApplicationContext(), "o93od 8adi ya boujadi", Toast.LENGTH_LONG);
