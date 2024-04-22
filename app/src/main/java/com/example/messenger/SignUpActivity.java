@@ -23,6 +23,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     User user = new User();
     MyDataBase db = new MyDataBase(this);
+    Toast invalid_input_toast;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,27 +35,45 @@ public class SignUpActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 //check if user input is valid
-                if (!user.getFull_name().isEmpty() && !user.getEmail().isEmpty() && isValidNewEmail(user.getEmail()) && !user.getPhone_number().isEmpty() && isValidPhone(user.getPhone_number()) && !user.getBirthdate().isEmpty() && isValidBirthdate(user.getBirthdate()) && !user.getPwd().isEmpty() && isValidPassword(user.getPwd())){
-                    user.setProfile_image("https://www.youtube.com/watch?v=lHZwlzOUOZ4");
-                    //check if user exists
-                    if (db.user_exist(user) == 0){
-                        db.insertUser(user);
-                        Toast toast = Toast.makeText(getApplicationContext(), "account created successfully", Toast.LENGTH_LONG);
-                        toast.show();
-                        System.out.println(db.user_exist(user));
-                    }
-                    else{
-                        Toast toast = Toast.makeText(getApplicationContext(), "user already exists", Toast.LENGTH_LONG);
-                        toast.show();
-                    }
+                if(user.getFull_name().isEmpty()){
+                    Toast.makeText(getApplicationContext(),"type your full name",Toast.LENGTH_LONG).show();
+                }
+                else if(user.getEmail().isEmpty()){
+                    Toast.makeText(getApplicationContext(),"type your email",Toast.LENGTH_LONG).show();
+                }
+                else if(!isValidNewEmail(user.getEmail())){
+                    Toast.makeText(getApplicationContext(),"email is not valid",Toast.LENGTH_LONG).show();
+                }
+                else if(user.getPhone_number().isEmpty()){
+                    Toast.makeText(getApplicationContext(),"type your phone number",Toast.LENGTH_LONG).show();
+                }
+                else if(!isValidPhone(user.getPhone_number())){
+                    Toast.makeText(getApplicationContext(),"phone number is not valid",Toast.LENGTH_LONG).show();
+                }
+                else if(user.getBirthdate().isEmpty()){
+                    Toast.makeText(getApplicationContext(),"type your birthdate",Toast.LENGTH_LONG).show();
+                }
+                else if(!isValidBirthdate(user.getBirthdate())){
+                    Toast.makeText(getApplicationContext(),"birthdate must be dd/mm/yyyy",Toast.LENGTH_LONG).show();
+                }
+                else if(user.getPwd().isEmpty()){
+                    Toast.makeText(getApplicationContext(),"type your password",Toast.LENGTH_LONG).show();
+                }
+                else if(!isValidPassword(user.getPwd())){
+                    Toast.makeText(getApplicationContext(),"password must contain at least 6 alphabets and digits",Toast.LENGTH_LONG).show();
                 }
                 else{
-                    Toast toast = Toast.makeText(getApplicationContext(), "o93od 8adi ya boujadi", Toast.LENGTH_LONG);
-                    toast.show();
-
-                    Log.d("SignUpActivity", "Some input fields are invalid");
+                    // Valid input
+                    user.setProfile_image("https://www.youtube.com/watch?v=lHZwlzOUOZ4");
+                    if (db.user_exist(user) == 0) {
+                        // User doesn't exist, proceed with sign-up
+                        db.insertUser(user);
+                        Toast.makeText(getApplicationContext(), "Account created successfully", Toast.LENGTH_LONG).show();
+                    } else {
+                        // User already exists, show error message
+                        Toast.makeText(getApplicationContext(), "User already exists", Toast.LENGTH_LONG).show();
+                    }
                 }
-
             }
         });
 
@@ -112,7 +131,7 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 String email = s.toString().trim();
-                if (!email.isEmpty() && !isValidNewEmail(email)) {
+                if (email.isEmpty() || !isValidNewEmail(email)) {
                     email_input.setError("Invalid email address");
                 } else {
                     email_input.setError(null);
@@ -134,9 +153,8 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 String phone = s.toString().trim();
-                if (!phone.isEmpty() && !isValidPhone(phone)) {
+                if (phone.isEmpty() || !isValidPhone(phone)) {
                     phone_input.setError("Invalid Phone Number");
-                    user.setPhone_number(phone);
                 } else {
                     phone_input.setError(null);
                     user.setPhone_number(phone);
@@ -158,7 +176,7 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 String birthdate = s.toString().trim();
-                if (!birthdate.isEmpty() && !isValidBirthdate(birthdate)) {
+                if (birthdate.isEmpty() || !isValidBirthdate(birthdate)) {
                     birthdate_input.setError("Invalid birthdate");
                 } else {
                     birthdate_input.setError(null);
@@ -181,7 +199,7 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 String pwd = s.toString().trim();
-                if (!pwd.isEmpty() && !isValidPassword(pwd)) {
+                if (pwd.isEmpty() || !isValidPassword(pwd)) {
                     pwd_input.setError("Weak Password");
                 } else {
                     pwd_input.setError(null);
@@ -202,9 +220,11 @@ public class SignUpActivity extends AppCompatActivity {
         return Patterns.PHONE.matcher(phone).matches();
     }
 
-    private  boolean isValidBirthdate(String birthdate){
-        return true;
+    private boolean isValidBirthdate(String birthdate) {
+        String regex = "^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/((19|20)\\d\\d)$";
+        return birthdate.matches(regex);
     }
+
     private boolean isValidPassword(String password) {
         if (password.length() < 6) {
             return false;
