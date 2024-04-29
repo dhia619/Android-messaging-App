@@ -150,7 +150,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:fontFamily="@font/poppins"
-                android:text="@string/sign_in"
+                android:text="@string/signup"
                 android:padding="20dp"
                 android:backgroundTint="@color/primary_dark"
                 android:textColor="@color/primary_green"

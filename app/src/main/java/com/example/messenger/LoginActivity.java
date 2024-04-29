@@ -27,6 +27,9 @@ public class LoginActivity extends AppCompatActivity {
         Button log_in = findViewById(R.id.loginbtn);
         TextView sign_in = findViewById(R.id.sign_in);
 
+        TextInputLayout email_input = findViewById(R.id.emailFieldLayout);
+        TextInputLayout pwd_input = findViewById(R.id.pwdFieldLayout);
+
         //Redirection to Sign in
         sign_in.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -40,9 +43,22 @@ public class LoginActivity extends AppCompatActivity {
         log_in.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
+                String email = email_input.getEditText().getText().toString();
+                String pwd = pwd_input.getEditText().getText().toString();
                 //check if user input is valid
-                if (!user.getEmail().isEmpty() && isValidEmail(user.getEmail()) && !user.getPwd().isEmpty() && isValidPassword(user.getPwd())) {
+                if (email.isEmpty()) {
+                    email_input.setError("type your email");
 
+                }else if(!isValidEmail(email)){
+                    email_input.setError("invalid email address");
+                }
+                else if(pwd.isEmpty()){
+                    pwd_input.setError("type your password");
+                }
+                else if(!isValidPassword(pwd)){
+                    pwd_input.setError("password must contain at least 6 alphabets and digits");
+                }
+                else{
                     //access db to see if user exist or not
 
 
@@ -52,16 +68,10 @@ public class LoginActivity extends AppCompatActivity {
                     overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 }
                 //user input not valid so login fails
-                else{
-                    Toast toast = Toast.makeText(getApplicationContext(), "o93od 8adi ya boujadi", Toast.LENGTH_LONG);
-                    toast.show();
-                }
             }
         });
 
-        //Control on the Inputs (email Only)
-        TextInputLayout email_input = findViewById(R.id.emailFieldLayout);
-        TextInputLayout pwd_input = findViewById(R.id.pwdFieldLayout);
+        //Control on the Inputs
 
         Objects.requireNonNull(email_input.getEditText()).addTextChangedListener(new TextWatcher() {
             @Override

@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class MyDataBase extends SQLiteOpenHelper {
     public static final String db_name = "messenger";
-    public static final int db_version = 3;
+    public static final int db_version = 1;
     public MyDataBase(Context context){
         super(context,db_name,null,db_version);
     }

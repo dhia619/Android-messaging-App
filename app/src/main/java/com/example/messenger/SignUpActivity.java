@@ -15,6 +15,8 @@ import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 import android.util.Log;
 
@@ -30,41 +32,52 @@ public class SignUpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sign_up);
 
         Button sign_up_button = findViewById(R.id.signup);
+        TextInputLayout full_name_input = findViewById(R.id.fullNameFieldLayout);
+        TextInputLayout email_input = findViewById(R.id.emailFieldLayout);
+        TextInputLayout phone_input = findViewById(R.id.phoneFieldLayout);
+        TextInputLayout birthdate_input = findViewById(R.id.birthFieldLayout);
+        TextInputLayout pwd_input = findViewById(R.id.pwdFieldLayout);
         sign_up_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                String full_name = full_name_input.getEditText().getText().toString();
+                String email = email_input.getEditText().getText().toString();
+                String ph_num = phone_input.getEditText().getText().toString();
+                String date_naiss = birthdate_input.getEditText().getText().toString();
+                String pwd = pwd_input.getEditText().getText().toString();
                 //check if user input is valid
-                if(user.getFull_name().isEmpty()){
-                    Toast.makeText(getApplicationContext(),"type your full name",Toast.LENGTH_LONG).show();
+                if(full_name.isEmpty()){
+                    full_name_input.setError("type your full name");
                 }
-                else if(user.getEmail().isEmpty()){
-                    Toast.makeText(getApplicationContext(),"type your email",Toast.LENGTH_LONG).show();
+                else if(email.isEmpty()){
+                    email_input.setError("type your email");
                 }
-                else if(!isValidNewEmail(user.getEmail())){
-                    Toast.makeText(getApplicationContext(),"email is not valid",Toast.LENGTH_LONG).show();
+                else if(!isValidNewEmail(email)){
+                    email_input.setError("invalid email address");
                 }
-                else if(user.getPhone_number().isEmpty()){
-                    Toast.makeText(getApplicationContext(),"type your phone number",Toast.LENGTH_LONG).show();
+                else if(ph_num.isEmpty()){
+                    phone_input.setError("type your phone number");
                 }
-                else if(!isValidPhone(user.getPhone_number())){
-                    Toast.makeText(getApplicationContext(),"phone number is not valid",Toast.LENGTH_LONG).show();
+                else if(!isValidPhone(ph_num)){
+                    phone_input.setError("invalid phone number");
                 }
-                else if(user.getBirthdate().isEmpty()){
-                    Toast.makeText(getApplicationContext(),"type your birthdate",Toast.LENGTH_LONG).show();
+                else if(date_naiss.isEmpty()){
+                    birthdate_input.setError("type your birthdate");
                 }
-                else if(!isValidBirthdate(user.getBirthdate())){
-                    Toast.makeText(getApplicationContext(),"birthdate must be dd/mm/yyyy",Toast.LENGTH_LONG).show();
+                else if(!isValidBirthdate(date_naiss)){
+                    birthdate_input.setError("birthdate must be dd/mm/yyyy");
                 }
-                else if(user.getPwd().isEmpty()){
-                    Toast.makeText(getApplicationContext(),"type your password",Toast.LENGTH_LONG).show();
+                else if(pwd.isEmpty()){
+                    pwd_input.setError("type your password");
                 }
-                else if(!isValidPassword(user.getPwd())){
-                    Toast.makeText(getApplicationContext(),"password must contain at least 6 alphabets and digits",Toast.LENGTH_LONG).show();
+                else if(!isValidPassword(pwd)){
+                    pwd_input.setError("password must contain at least 6 alphabets and digits");
                 }
                 else{
                     // Valid input
                     user.setProfile_image("https://www.youtube.com/watch?v=lHZwlzOUOZ4");
+                    Toast.makeText(SignUpActivity.this,user.getEmail()+" | "+user.getFull_name(),Toast.LENGTH_LONG);
                     if (db.user_exist(user) == 0) {
                         // User doesn't exist, proceed with sign-up
                         db.insertUser(user);
@@ -88,13 +101,9 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
         //Control on the inputs (full_name, email, phone_number, birthdate, password)
-        TextInputLayout full_name_input = findViewById(R.id.fullNameFieldLayout);
-        TextInputLayout email_input = findViewById(R.id.emailFieldLayout);
-        TextInputLayout phone_input = findViewById(R.id.phoneFieldLayout);
-        TextInputLayout birthdate_input = findViewById(R.id.birthFieldLayout);
-        TextInputLayout pwd_input = findViewById(R.id.pwdFieldLayout);
 
         Objects.requireNonNull(full_name_input.getEditText()).addTextChangedListener(new TextWatcher() {
+
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -162,7 +171,7 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
 
-        Objects.requireNonNull(email_input.getEditText()).addTextChangedListener(new TextWatcher() {
+        Objects.requireNonNull(birthdate_input.getEditText()).addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -175,13 +184,21 @@ public class SignUpActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                String birthdate = s.toString().trim();
-                if (birthdate.isEmpty() || !isValidBirthdate(birthdate)) {
+                String date_naiss = s.toString().trim();
+                if (date_naiss.isEmpty() || !isValidBirthdate(date_naiss)) {
                     birthdate_input.setError("Invalid birthdate");
-                } else {
-                    birthdate_input.setError(null);
-                    user.setBirthdate(birthdate);
                 }
+                else {
+                    LocalDate birthdatee = LocalDate.parse(date_naiss, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+                    LocalDate currentDate = LocalDate.now();
+                    if (birthdatee.isAfter(currentDate)) {
+                        birthdate_input.setError("Birthdate cannot be in the future");
+                    } else {
+                        birthdate_input.setError(null);
+                        user.setBirthdate(date_naiss);
+                    }
+                }
+
             }
         });
 
@@ -221,7 +238,7 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private boolean isValidBirthdate(String birthdate) {
-        String regex = "^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/((19|20)\\d\\d)$";
+        String regex = "^(0[1-9]|[1-2][0-9]|3[01])/(0[1-9]|1[0-2])/((19|20)\\d\\d)$";
         return birthdate.matches(regex);
     }
 
