@@ -1,6 +1,7 @@
 package adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 //import com.bumptech.glide.Glide;
+import com.example.messenger.MessagingActivity;
 import com.example.messenger.R;
 import com.example.messenger.User;
 
@@ -42,6 +44,16 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         } else {
             //Glide.with(mContext).load(user.getProfile_image()).into(holder.profile_img);
         }
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, MessagingActivity.class);
+                intent.putExtra("userId",user.getId());
+                mContext.startActivity(intent);
+            }
+        });
+
     }
 
     @Override

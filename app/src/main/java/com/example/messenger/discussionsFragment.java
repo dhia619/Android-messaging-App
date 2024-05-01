@@ -64,6 +64,7 @@ public class discussionsFragment extends Fragment {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     User user = snapshot.getValue(User.class);
                     if (user != null) {
+                        user.setId(snapshot.getKey());
                         mUsers.add(user);
                     }
                 }
