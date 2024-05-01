@@ -3,28 +3,37 @@ package com.example.messenger;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Base64;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Objects;
 
 public class SignUpActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private DatabaseReference usersRef;
+    private static final int REQUEST_SELECT_IMAGE = 1;
+    User user = new User();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +89,6 @@ public class SignUpActivity extends AppCompatActivity {
                     pwd_input.setError("password must contain at least 6 alphabets and digits");
                 }
                 else{
-                    User user = new User(); // Create the user object with data
                     user.setFull_name(full_name);
                     user.setEmail(email);
                     user.setPhone_number(ph_num);
@@ -117,6 +125,17 @@ public class SignUpActivity extends AppCompatActivity {
 
         //Redirection to Log in
         TextView sign_in = findViewById(R.id.log_in);
+
+        ImageButton add_profile_icon_button = findViewById(R.id.avatarIB);
+        //avatarImageView = findViewById(R.id.avatar); // Update the variable type
+
+        add_profile_icon_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openGallery();
+            }
+        });
+
         sign_in.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -243,5 +262,58 @@ public class SignUpActivity extends AppCompatActivity {
         String regex = "^(?=.*[A-Za-z])(?=.*\\d).+$";
         return password.matches(regex);
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_SELECT_IMAGE && resultCode == RESULT_OK) {
+            if (data != null) {
+                Uri selectedImageUri = data.getData();
+
+                if (selectedImageUri != null) {
+                    // Set the selected image URI to your ShapeableImageView
+                    ShapeableImageView profileIcon = findViewById(R.id.avatar);
+                    profileIcon.setImageURI(selectedImageUri);
+                    try {
+                        // Convert the image URI to a byte array
+                        InputStream inputStream = getContentResolver().openInputStream(selectedImageUri);
+                        byte[] imageData = getBytes(inputStream);
+                        // Convert the byte array to a Base64 string
+                        String base64Image = Base64.encodeToString(imageData, Base64.DEFAULT);
+                        user.setProfile_image(base64Image);
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    Toast.makeText(this, "Failed to select image", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(this, "No image selected", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    // function to open gallery
+    private void openGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*");
+        startActivityForResult(intent, REQUEST_SELECT_IMAGE);
+    }
+
+    // Helper method to convert input stream to byte array
+    private byte[] getBytes(InputStream inputStream) throws IOException {
+        ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
+        int bufferSize = 1024;
+        byte[] buffer = new byte[bufferSize];
+        int len;
+        while ((len = inputStream.read(buffer)) != -1) {
+            byteBuffer.write(buffer, 0, len);
+        }
+        return byteBuffer.toByteArray();
+    }
+
+
 }
 

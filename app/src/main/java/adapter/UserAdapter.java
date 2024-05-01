@@ -1,6 +1,7 @@
 package adapter;
 
 import android.content.Context;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
+//import com.bumptech.glide.Glide;
 import com.example.messenger.R;
 import com.example.messenger.User;
 
@@ -39,7 +40,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         if (user.getProfile_image().equals("default")){
             holder.profile_img.setImageResource(R.mipmap.ic_launcher);
         } else {
-            Glide.with(mContext).load(user.getProfile_image()).into(holder.profile_img);
+            //Glide.with(mContext).load(user.getProfile_image()).into(holder.profile_img);
         }
     }
 
@@ -57,4 +58,22 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             profile_img = itemView.findViewById(R.id.profile_img);
         }
     }
+    public byte[] getImageBytesFromBase64(String base64Image) {
+        // Decode the Base64 string into a byte array
+        byte[] imageData = Base64.decode(base64Image, Base64.DEFAULT);
+        return imageData;
+    }
+
+    /*
+    // Assuming you have a Base64-encoded image string stored in a variable called base64Image
+    byte[] imageData = getImageBytesFromBase64(base64Image);
+
+    // Convert the byte array to a Bitmap
+    Bitmap bitmap = BitmapFactory.decodeByteArray(imageData, 0, imageData.length);
+
+    // Display the bitmap in an ImageView
+    ImageView imageView = findViewById(R.id.your_image_view_id);
+    imageView.setImageBitmap(bitmap);
+     */
+
 }

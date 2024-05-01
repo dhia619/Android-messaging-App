@@ -14,8 +14,9 @@
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:layout_gravity="center"
-            app:srcCompat="@drawable/avatar" />
+            android:src="@drawable/avatar"/>
         <ImageButton
+            android:id="@+id/avatarIB"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginTop="-40dp"
