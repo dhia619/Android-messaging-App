@@ -1,8 +1,13 @@
 package com.example.messenger;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkCapabilities;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -12,17 +17,29 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity {
 
-    User user = new User();
+    private FirebaseAuth mAuth;
+    private User user = new User();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        AuthenticationManager mAuthManager = new AuthenticationManager(this);
+
+        mAuth = FirebaseAuth.getInstance();
 
         Button log_in = findViewById(R.id.loginbtn);
         TextView sign_in = findViewById(R.id.sign_in);
@@ -30,59 +47,52 @@ public class LoginActivity extends AppCompatActivity {
         TextInputLayout email_input = findViewById(R.id.emailFieldLayout);
         TextInputLayout pwd_input = findViewById(R.id.pwdFieldLayout);
 
-        //Redirection to Sign in
+
+        // Check connectivity status
+        if (!isDeviceOnline()) {
+            Snackbar.make(findViewById(android.R.id.content), "No internet connection", Snackbar.LENGTH_LONG).show();
+        }
+
+        // Redirection to Sign in
         sign_in.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
                 startActivity(intent);
-                overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             }
         });
-        //Redirection to Home
+
+        // Attempt login
         log_in.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 String email = email_input.getEditText().getText().toString();
                 String pwd = pwd_input.getEditText().getText().toString();
-                //check if user input is valid
+
+                // Check if user input is valid
                 if (email.isEmpty()) {
-                    email_input.setError("type your email");
-
-                }else if(!isValidEmail(email)){
-                    email_input.setError("invalid email address");
+                    email_input.setError("Type your email");
+                } else if (!isValidEmail(email)) {
+                    email_input.setError("Invalid email address");
+                } else if (pwd.isEmpty()) {
+                    pwd_input.setError("Type your password");
+                } else if (!isValidPassword(pwd)) {
+                    pwd_input.setError("Password must contain at least 6 alphabets and digits");
+                } else {
+                    // Authenticate user
+                    mAuthManager.authenticate(email, pwd);
                 }
-                else if(pwd.isEmpty()){
-                    pwd_input.setError("type your password");
-                }
-                else if(!isValidPassword(pwd)){
-                    pwd_input.setError("password must contain at least 6 alphabets and digits");
-                }
-                else{
-                    //access db to see if user exist or not
-
-
-                    //set intent to move to the home page (chats)
-                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                    startActivity(intent);
-                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-                }
-                //user input not valid so login fails
             }
         });
 
-        //Control on the Inputs
-
+        // Control on the Inputs
         Objects.requireNonNull(email_input.getEditText()).addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
 
             @Override
             public void afterTextChanged(Editable s) {
@@ -93,19 +103,15 @@ public class LoginActivity extends AppCompatActivity {
                     email_input.setError(null);
                     user.setEmail(email_input.getEditText().getText().toString());
                 }
-
             }
         });
+
         Objects.requireNonNull(pwd_input.getEditText()).addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
 
             @Override
             public void afterTextChanged(Editable s) {
@@ -116,15 +122,16 @@ public class LoginActivity extends AppCompatActivity {
                     pwd_input.setError(null);
                     user.setPwd(pwd_input.getEditText().getText().toString());
                 }
-
             }
         });
     }
+
     @Override
     public void finish(){
         super.finish();
-        overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
+
     private boolean isValidEmail(String email) {
         return Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
@@ -136,4 +143,31 @@ public class LoginActivity extends AppCompatActivity {
         String regex = "^(?=.*[A-Za-z])(?=.*\\d).+$";
         return password.matches(regex);
     }
+
+    // Method to handle authentication result
+    public void handleAuthenticationResult(boolean isAuthenticated) {
+        if (isAuthenticated) {
+            // Authentication successful, proceed to home activity
+            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+            startActivity(intent);
+            Toast.makeText(LoginActivity.this, "Logged successfully", Toast.LENGTH_SHORT).show();
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+            finish(); // Optionally finish LoginActivity to prevent back navigation
+        } else {
+            // Authentication failed, show appropriate message to the user
+            Toast.makeText(LoginActivity.this, "Authentication failed", Toast.LENGTH_SHORT).show();
+        }
+    }
+    private boolean isDeviceOnline() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivityManager != null) {
+            NetworkCapabilities networkCapabilities = connectivityManager.getNetworkCapabilities(connectivityManager.getActiveNetwork());
+            if (networkCapabilities != null) {
+                return networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);
+            }
+        }
+        return false;
+    }
+
+
 }
