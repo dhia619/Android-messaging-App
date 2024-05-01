@@ -17,7 +17,7 @@ public class SecondForgotPasswordActivity extends AppCompatActivity {
 
         ImageButton backbtn = findViewById(R.id.backButton);
         Button verifybtn = findViewById(R.id.verifyButton);
-
+        //
         backbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
