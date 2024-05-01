@@ -27,6 +27,10 @@
     <string name="favorite">chat</string>
     <string name="search">chat</string>
     <string name="chats">chat</string>
+    <string name="username">Username</string>
+    <string name="active_status">active status</string>
+    <string name="on">On</string>
+    <string name="off">Off</string>
 
 
 </resources>
