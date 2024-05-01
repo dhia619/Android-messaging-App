@@ -13,25 +13,31 @@
         android:layout_height="match_parent"
         android:backgroundTint="@color/primary_dark">
         <LinearLayout
-            android:backgroundTint="@color/primary_dark"
+            android:backgroundTint="@color/white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:focusable="true">
             <ImageView
-                android:layout_width="150dp"
-                android:layout_height="150dp"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_marginTop="30dp"
                 android:src="@drawable/avatar"
                 android:layout_gravity="center"
+                android:contentDescription="@string/profile_image"
                 />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="50dp">
+                android:layout_marginTop="50dp"
+                android:background="@drawable/rounded_item"
+                android:padding="15dp">
                 <ImageView
-                    android:layout_width="64dp"
-                    android:layout_height="64dp"
-                    android:src="@mipmap/edit_foreground"
-                    android:layout_marginLeft="10dp"
+                    android:layout_width="54dp"
+                    android:layout_height="54dp"
+                    android:src="@mipmap/edit"
+                    android:layout_marginStart="10dp"
+                    android:contentDescription="@string/username"
                     />
 
                 <TextView
@@ -40,19 +46,23 @@
                     android:fontFamily="@font/poppins"
                     android:text="@string/username"
                     android:gravity="center_vertical"
-                    android:textSize="25sp"
+                    android:textSize="18sp"
                     android:layout_marginStart="25dp"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/rounded_item"
+                android:padding="15dp"
                 >
                 <ImageView
                     android:layout_width="64dp"
                     android:layout_height="match_parent"
                     android:src="@mipmap/active"
-                    android:layout_marginStart="10dp"/>
+                    android:layout_marginStart="10dp"
+                    android:contentDescription="@string/active_status"
+                    />
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -61,7 +71,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/active_status"
-                        android:textSize="25sp"
+                        android:textSize="18sp"
                         android:fontFamily="@font/poppins"
                         android:layout_marginStart="25dp"
                         />
@@ -69,30 +79,37 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/on"
-                        android:textSize="20sp"
+                        android:textSize="16sp"
                         android:textColor="@color/primary_green"
                         android:fontFamily="@font/poppins"
                         android:layout_marginStart="25dp"
                         />
                 </LinearLayout>
             </LinearLayout>
-            <!--
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                >
+                android:layout_marginTop="10dp"
+                android:background="@drawable/rounded_item"
+                android:padding="15dp">
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src=""/>
+                    android:layout_width="54dp"
+                    android:layout_height="54dp"
+                    android:src="@mipmap/add_friend"
+                    android:layout_marginStart="10dp"
+                    android:contentDescription="@string/friends"
+                    />
+
                 <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/username"
-                    android:textSize="25sp"
-                    android:fontFamily="@font/poppins" />
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/poppins"
+                    android:text="@string/friends"
+                    android:gravity="center_vertical"
+                    android:textSize="18sp"
+                    android:layout_marginStart="25dp"/>
             </LinearLayout>
-            -->
+
         </LinearLayout>
     </ScrollView>
 

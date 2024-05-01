@@ -28,9 +28,24 @@
     <string name="search">chat</string>
     <string name="chats">chat</string>
     <string name="username">Username</string>
-    <string name="active_status">active status</string>
+    <string name="active_status">Active status</string>
     <string name="on">On</string>
     <string name="off">Off</string>
-
+    <string name="title_activity_messaging">perepe</string>
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="profile_image">profile picture</string>
+    <string name="friends">Friends</string>
+    <string name="send">Send</string>
+    <string name="type_email">Enter the email address associated with your account.</string>
+    <string name="type_code">Enter the verification code we just sent you on your email address.</string>
+    <string name="verification">Verification</string>
+    <string name="verify">Verify</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="type_new_pwd">Type new password</string>
+    <string name="retype_new_pwd">Retype new password</string>
+    <string name="save">Save</string>
+    <string name="not_received">have not received the code ?</string>
+    <string name="resend">Resend</string>
 
 </resources>

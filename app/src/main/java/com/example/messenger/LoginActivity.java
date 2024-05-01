@@ -47,6 +47,7 @@ public class LoginActivity extends AppCompatActivity {
         TextInputLayout email_input = findViewById(R.id.emailFieldLayout);
         TextInputLayout pwd_input = findViewById(R.id.pwdFieldLayout);
 
+        TextView forgot_pwd = findViewById(R.id.forgotPWD);
 
         // Check connectivity status
         if (!isDeviceOnline()) {
@@ -83,6 +84,15 @@ public class LoginActivity extends AppCompatActivity {
                     // Authenticate user
                     mAuthManager.authenticate(email, pwd);
                 }
+            }
+        });
+
+        forgot_pwd.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this, MainForgotPasswordActivity.class);
+                startActivity(intent);
             }
         });
 
