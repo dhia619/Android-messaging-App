@@ -39,8 +39,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         User user = mUsers.get(position);
         holder.username.setText(user.getFull_name());
-        if (user.getProfile_image().equals("default")){
-            holder.profile_img.setImageResource(R.mipmap.ic_launcher);
+        if (user.getProfile_image().equals("")){
+            holder.profile_img.setImageResource(R.mipmap.ic_default_avatar_round);
         } else {
             //Glide.with(mContext).load(user.getProfile_image()).into(holder.profile_img);
         }
