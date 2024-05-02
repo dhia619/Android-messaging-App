@@ -127,7 +127,7 @@ public class LoginActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
                 String pwd = s.toString().trim();
                 if (!pwd.isEmpty() && !isValidPassword(pwd)) {
-                    pwd_input.setError("Invalid Password");
+                    pwd_input.setError("Password must contain at least 6 alphabets and digits");
                 } else {
                     pwd_input.setError(null);
                     user.setPwd(pwd_input.getEditText().getText().toString());

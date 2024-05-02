@@ -2,6 +2,8 @@ package com.example.messenger;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -37,7 +39,7 @@ import java.util.Objects;
 
 import adapter.MessageAdapter;
 
-
+import com.example.messenger.ImageHandling;
 public class MessagingActivity extends AppCompatActivity {
 
     ImageView profile_Image;
@@ -115,13 +117,17 @@ public class MessagingActivity extends AppCompatActivity {
             reference.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    Toast.makeText(MessagingActivity.this, "misssage", Toast.LENGTH_SHORT).show();
                     User user = snapshot.getValue(User.class);
                     if (user != null) {
                         username.setText(user.getFull_name());
                         if (user.getProfile_image().equals("")) {
                             profile_Image.setImageResource(R.mipmap.ic_default_avatar_round);
                         } else {
-                            Glide.with(MessagingActivity.this).load(user.getProfile_image()).into(profile_Image);
+                            //Glide.with(MessagingActivity.this).load(user.getProfile_image()).into(profile_Image);
+                            byte[] image_data = ImageHandling.getImageBytesFromBase64(user.getProfile_image());
+                            Bitmap bitmap = BitmapFactory.decodeByteArray(image_data, 0, image_data.length);
+                            profile_Image.setImageBitmap(bitmap);
                         }
                     }
                     assert user != null;
