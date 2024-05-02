@@ -37,8 +37,6 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
         bundle.putSerializable("user", user);
         // Initialize selectedFragment before calling setArguments()
         selectedFragment = new discussionsFragment();
-        selectedFragment.setArguments(bundle);
-
         MaterialToolbar topAppBar = findViewById(R.id.topAppBar);
         intent = getIntent();
         String profile_img = intent.getStringExtra("profile_image");
@@ -76,6 +74,7 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
             selectedFragment = new discussionsFragment();
         } else if (itemId == R.id.profile) {
             selectedFragment = new profileFragment();
+            selectedFragment.setArguments(bundle);
         }
         assert selectedFragment != null;
         getSupportFragmentManager().beginTransaction().replace(R.id.flFragment, selectedFragment).commit();

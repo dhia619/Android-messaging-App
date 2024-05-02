@@ -2,6 +2,8 @@ package adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 //import com.bumptech.glide.Glide;
+import com.example.messenger.ImageHandling;
 import com.example.messenger.MessagingActivity;
 import com.example.messenger.R;
 import com.example.messenger.User;
@@ -42,6 +45,10 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         if (user.getProfile_image().equals("")){
             holder.profile_img.setImageResource(R.mipmap.ic_default_avatar_round);
         } else {
+            String base64image = user.getProfile_image();
+            byte[] image_data = ImageHandling.getImageBytesFromBase64(base64image);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(image_data, 0, image_data.length);
+            holder.profile_img.setImageBitmap(bitmap);
             //Glide.with(mContext).load(user.getProfile_image()).into(holder.profile_img);
         }
 

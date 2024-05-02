@@ -33,7 +33,7 @@ public class profileFragment extends Fragment {
         // Initialize intent
         Intent intent = getActivity().getIntent();
         Bundle bundle = getArguments();
-        String userId = null;
+        String userId = "";
         if (bundle != null) {
             user = (User) bundle.getSerializable("user");
             if (user != null) {
@@ -41,11 +41,10 @@ public class profileFragment extends Fragment {
                 userId = user.getId();
             }
         }
-        if (userId != null) {
+        Toast.makeText(getContext(), userId, Toast.LENGTH_SHORT).show();
+        if (userId != "") {
             usersRef = FirebaseDatabase.getInstance("https://messaging-app-d78bd-default-rtdb.europe-west1.firebasedatabase.app/")
                     .getReference("users").child(userId);
-            Toast.makeText(getContext(), "Mrigla", Toast.LENGTH_SHORT).show();
-            System.out.println("Mriglaaaaaaaaaa");
             usersRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
