@@ -2,6 +2,8 @@ package adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 //import com.bumptech.glide.Glide;
 import com.example.messenger.Chat;
+import com.example.messenger.ImageHandling;
 import com.example.messenger.MessagingActivity;
 import com.example.messenger.R;
 import com.example.messenger.User;
@@ -40,6 +43,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     public MessageAdapter(Context mContext, List<Chat> mChat,String img ){
         this.mChat = mChat;
         this.mContext = mContext;
+        this.img = img;
     }
 
     @NonNull
@@ -60,12 +64,16 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Chat chat = mChat.get(position);
         holder.show_message.setText(chat.getMessage());
+        chat.setReceiverImg(img);
 
         // Check if profile_img is not null before setting image resource
         if (holder.profile_img != null) {
-            if (img != null && !img.isEmpty()) {
+            if (chat.getReceiverImg() != null && !chat.getReceiverImg().isEmpty()) {
                 // Load image using Glide or any other image loading library
-                // Glide.with(mContext).load(img).into(holder.profile_img);
+                String base64image = chat.getReceiverImg();
+                byte[] image_data = ImageHandling.getImageBytesFromBase64(base64image);
+                Bitmap bitmap = BitmapFactory.decodeByteArray(image_data, 0, image_data.length);
+                holder.profile_img.setImageBitmap(bitmap);
             } else {
                 // Set a default image if img is null or empty
                 holder.profile_img.setImageResource(R.mipmap.ic_default_avatar_round);
@@ -74,6 +82,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             Log.e("MessageAdapter", "profile_img is null");
         }
     }
+
 
     @Override
     public int getItemCount() {
@@ -86,7 +95,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         public ViewHolder(View itemView){
             super(itemView);
             show_message = itemView.findViewById(R.id.show_message);
-            profile_img = itemView.findViewById(R.id.profile_img);
+            profile_img = itemView.findViewById(R.id.profile_img_chat);
         }
     }
     public byte[] getImageBytesFromBase64(String base64Image) {

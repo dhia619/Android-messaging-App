@@ -14,16 +14,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.airbnb.lottie.model.content.CircleShape;
 import com.bumptech.glide.Glide;
-import com.google.android.material.appbar.AppBarLayout;
-import com.google.firebase.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -40,6 +36,7 @@ import java.util.Objects;
 import adapter.MessageAdapter;
 
 import com.example.messenger.ImageHandling;
+
 public class MessagingActivity extends AppCompatActivity {
 
     ImageView profile_Image;
@@ -52,6 +49,8 @@ public class MessagingActivity extends AppCompatActivity {
 
     ImageButton send_btn;
     EditText send_text;
+
+    String ReceiverImg;
 
     MessageAdapter msgAdapter;
     List<Chat> mChat;
@@ -75,7 +74,6 @@ public class MessagingActivity extends AppCompatActivity {
             }
         });
 
-
         recyclerView = findViewById(R.id.msg_container);
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
@@ -88,22 +86,17 @@ public class MessagingActivity extends AppCompatActivity {
         send_btn = findViewById(R.id.send_btn);
         send_text = findViewById(R.id.msg_input);
 
-
-
         intent = getIntent();
         String userId = intent.getStringExtra("userId");
-        //Toast.makeText(this, userId, Toast.LENGTH_SHORT).show();
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-
-
 
         send_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String msg = send_text.getText().toString().trim();
-                if (!msg.equals("")){
-                    sendMessage(firebaseUser.getUid(), userId, msg);
-                }else{
+                if (!msg.isEmpty()) {
+                    sendMessage(firebaseUser.getUid(), userId, msg, ReceiverImg);
+                } else {
                     Toast.makeText(MessagingActivity.this, "Failed to send message", Toast.LENGTH_SHORT).show();
                 }
                 send_text.setText("");
@@ -111,8 +104,7 @@ public class MessagingActivity extends AppCompatActivity {
         });
 
         if (userId != null) {
-            reference = FirebaseDatabase
-                    .getInstance("https://messaging-app-d78bd-default-rtdb.europe-west1.firebasedatabase.app/")
+            reference = FirebaseDatabase.getInstance("https://messaging-app-d78bd-default-rtdb.europe-west1.firebasedatabase.app/")
                     .getReference("users").child(userId);
             reference.addValueEventListener(new ValueEventListener() {
                 @Override
@@ -121,22 +113,30 @@ public class MessagingActivity extends AppCompatActivity {
                     if (user != null) {
                         username.setText(user.getFull_name());
                         String profileImage = user.getProfile_image();
-                        if (profileImage != null && profileImage.equals("")) {
-                            profile_Image.setImageResource(R.mipmap.ic_default_avatar_round);
-                        } else {
+                        ReceiverImg = user.getProfile_image();
+                        if (profileImage != null && !profileImage.isEmpty()) {
                             // Load profile image
-                            if (profileImage != null) {
-                                byte[] image_data = ImageHandling.getImageBytesFromBase64(profileImage);
+                            byte[] image_data = ImageHandling.getImageBytesFromBase64(profileImage);
+                            if (image_data != null) {
                                 Bitmap bitmap = BitmapFactory.decodeByteArray(image_data, 0, image_data.length);
-                                profile_Image.setImageBitmap(bitmap);
+                                if (bitmap != null) {
+                                    profile_Image.setImageBitmap(bitmap);
+                                } else {
+                                    // Handle the case where bitmap is null
+                                }
+                            } else {
+                                // Handle the case where image_data is null
                             }
+                        } else {
+                            // Set default profile image
+                            profile_Image.setImageResource(R.mipmap.ic_default_avatar_round);
                         }
+                        displayMsgs(firebaseUser.getUid(), userId, ReceiverImg);
                     } else {
                         // Handle the case when user is null
                         Toast.makeText(MessagingActivity.this, "User data is null", Toast.LENGTH_SHORT).show();
                     }
                 }
-
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
@@ -144,50 +144,49 @@ public class MessagingActivity extends AppCompatActivity {
                 }
             });
         } else {
-            // Handle the case when userid is null
+            Toast.makeText(this, "null", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void setSupportActionBar(Toolbar toolbar) {
-    }
+    private void sendMessage(String sender, String receiver, String msg, String ReceiverImg) {
+        DatabaseReference reference = FirebaseDatabase.getInstance("https://messaging-app-d78bd-default-rtdb.europe-west1.firebasedatabase.app/")
+                .getReference();
 
-    private void sendMessage(String sender, String receiver, String msg){
-
-        DatabaseReference reference = FirebaseDatabase.getInstance("https://messaging-app-d78bd-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
-
-        HashMap<String,Object> hashmap = new HashMap<>();
+        HashMap<String, Object> hashmap = new HashMap<>();
         hashmap.put("sender", sender);
         hashmap.put("receiver", receiver);
         hashmap.put("message", msg);
-
+        hashmap.put("ReceiverImg",ReceiverImg);
+        Toast.makeText(this, ReceiverImg, Toast.LENGTH_SHORT).show();
         reference.child("chats").push().setValue(hashmap);
     }
 
-    private void displayMsgs(String myId, String userId, String Img){
+    private void displayMsgs(String myId, String userId, String Img) {
         mChat = new ArrayList<>();
 
-        reference = FirebaseDatabase.getInstance("https://messaging-app-d78bd-default-rtdb.europe-west1.firebasedatabase.app/").getReference("chats");
+        reference = FirebaseDatabase.getInstance("https://messaging-app-d78bd-default-rtdb.europe-west1.firebasedatabase.app/")
+                .getReference("chats");
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 mChat.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
                     Chat chat = snapshot.getValue(Chat.class);
-                    if (chat.getReceiver().equals(myId) && chat.getSender().equals(userId) || chat.getReceiver().equals(userId) && chat.getSender().equals(myId) ){
+                    if (chat != null && chat.getReceiver() != null && chat.getSender() != null &&
+                            ((chat.getReceiver().equals(myId) && chat.getSender().equals(userId)) ||
+                                    (chat.getReceiver().equals(userId) && chat.getSender().equals(myId)))) {
                         mChat.add(chat);
                     }
-                    msgAdapter = new MessageAdapter(MessagingActivity.this,mChat , Img);
+                    msgAdapter = new MessageAdapter(MessagingActivity.this, mChat, Img);
                     recyclerView.setAdapter(msgAdapter);
                 }
             }
+
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
         });
-
     }
-
-
 }

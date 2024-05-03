@@ -5,12 +5,15 @@ public class Chat {
     private String receiver;
     private String message;
 
+    private String ReceiverImg;
+
     public Chat() {
     }
-    public Chat(String sender, String receiver, String mmessage){
+    public Chat(String sender, String receiver, String message, String ReceiverImg){
         this.sender = sender;
         this.receiver = receiver;
         this.message = message;
+        this.ReceiverImg = ReceiverImg;
     }
 
     public String getMessage() {
@@ -35,5 +38,13 @@ public class Chat {
 
     public void setSender(String sender) {
         this.sender = sender;
+    }
+
+    public String getReceiverImg() {
+        return ReceiverImg;
+    }
+
+    public void setReceiverImg(String receiverImg) {
+        ReceiverImg = receiverImg;
     }
 }

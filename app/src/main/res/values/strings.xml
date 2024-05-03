@@ -52,5 +52,6 @@
     <string name="change_username">Change Username</string>
     <string name="new_username">New username</string>
     <string name="logout">Logout</string>
+    <string name="new_conversation">Hey there! 👋 Just wanted to say hi and start our conversation</string>
 
 </resources>

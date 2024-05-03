@@ -7,6 +7,7 @@
     android:background="@drawable/rounded_item"
     android:layout_marginTop="3dp"
     android:layout_marginBottom="3dp"
+
     >
 
 
@@ -15,19 +16,31 @@
         android:layout_height="50dp"
         android:id="@+id/profile_img"
         android:src="@mipmap/ic_launcher"
+        android:scaleType="fitXY"
         />
 
     <TextView
         android:id="@+id/username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginStart="14dp"
+        android:layout_marginStart="18dp"
         android:layout_marginLeft="10dp"
         android:layout_toEndOf="@id/profile_img"
+        android:fontFamily="@font/poppins"
         android:text="username"
-        android:textSize="14dp"
         android:textColor="@color/primary_dark"
-        android:fontFamily="@font/poppins_bold"/>
+        android:textSize="14dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/last_msg"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="35dp"
+        android:layout_toEndOf="@id/profile_img"
+        android:maxLines="1"
+        android:padding="2dp"
+        android:textSize="13sp"
+        android:text="@string/new_conversation" />
 
 </RelativeLayout>
