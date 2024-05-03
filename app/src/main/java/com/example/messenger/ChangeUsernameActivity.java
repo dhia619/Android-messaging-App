@@ -41,7 +41,7 @@ public class ChangeUsernameActivity extends AppCompatActivity {
         // Initialize Firebase components
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        reference = FirebaseDatabase.getInstance("https://messaging-app-d78bd-default-rtdb.europe-west1.firebasedatabase.app/").getReference("chats");
+        reference = FirebaseDatabase.getInstance("https://messaging-app-d78bd-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
         backbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

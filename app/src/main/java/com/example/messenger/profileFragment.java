@@ -11,12 +11,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -37,6 +42,8 @@ public class profileFragment extends Fragment {
         LinearLayout friendsLay = view.findViewById(R.id.friendsLayout);
         LinearLayout logoutLay = view.findViewById(R.id.logoutLayout);
 
+        TextView usernamelbl = view.findViewById(R.id.usernameView);
+
         // Initialize intent
         Intent intent = getActivity().getIntent();
         Bundle bundle = getArguments();
@@ -56,6 +63,7 @@ public class profileFragment extends Fragment {
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     User userData = snapshot.getValue(User.class);
                     if (userData != null) {
+                        usernamelbl.setText(userData.getFull_name());
                         profile_Image = view.findViewById(R.id.profilePicture);
                         String profileImage = userData.getProfile_image();
                         if (profileImage == null || profileImage.isEmpty()) {
@@ -119,12 +127,43 @@ public class profileFragment extends Fragment {
         logoutLay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(),LoginActivity.class);
-                startActivity(intent);
+                disconnectUser();
             }
         });
 
         return view;
     }
+
+    DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("users"); // Assuming "users" is the node where user data is stored
+
+    // Method to delete user data from Firebase Realtime Database
+    private void disconnectUser() {
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser != null) {
+            databaseRef = FirebaseDatabase.getInstance("https://messaging-app-d78bd-default-rtdb.europe-west1.firebasedatabase.app/")
+                    .getReference("users");
+            databaseRef.child(currentUser.getUid()).removeValue()
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            // Data removed successfully
+                            FirebaseAuth.getInstance().signOut(); // Sign out the user after disconnecting
+                            Toast.makeText(getContext(), "signed out", Toast.LENGTH_SHORT).show();
+                            // Redirect to sign-in
+                            Intent intent = new Intent(requireActivity(),LoginActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            // Handle failure
+                        }
+                    });
+        }
+    }
+
 
 }

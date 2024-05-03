@@ -57,7 +57,6 @@ public class MainForgotPasswordActivity extends AppCompatActivity {
                     //send email logic
                     FirebaseAuth auth = FirebaseAuth.getInstance();
                     String emailAddress = email_input.getEditText().getText().toString().trim();
-
                     auth.sendPasswordResetEmail(emailAddress)
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
