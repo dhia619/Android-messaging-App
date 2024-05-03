@@ -117,22 +117,26 @@ public class MessagingActivity extends AppCompatActivity {
             reference.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    Toast.makeText(MessagingActivity.this, "misssage", Toast.LENGTH_SHORT).show();
                     User user = snapshot.getValue(User.class);
                     if (user != null) {
                         username.setText(user.getFull_name());
-                        if (user.getProfile_image().equals("")) {
+                        String profileImage = user.getProfile_image();
+                        if (profileImage != null && profileImage.equals("")) {
                             profile_Image.setImageResource(R.mipmap.ic_default_avatar_round);
                         } else {
-                            //Glide.with(MessagingActivity.this).load(user.getProfile_image()).into(profile_Image);
-                            byte[] image_data = ImageHandling.getImageBytesFromBase64(user.getProfile_image());
-                            Bitmap bitmap = BitmapFactory.decodeByteArray(image_data, 0, image_data.length);
-                            profile_Image.setImageBitmap(bitmap);
+                            // Load profile image
+                            if (profileImage != null) {
+                                byte[] image_data = ImageHandling.getImageBytesFromBase64(profileImage);
+                                Bitmap bitmap = BitmapFactory.decodeByteArray(image_data, 0, image_data.length);
+                                profile_Image.setImageBitmap(bitmap);
+                            }
                         }
+                    } else {
+                        // Handle the case when user is null
+                        Toast.makeText(MessagingActivity.this, "User data is null", Toast.LENGTH_SHORT).show();
                     }
-                    assert user != null;
-                    displayMsgs(firebaseUser.getUid(), userId, user.getProfile_image());
                 }
+
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {

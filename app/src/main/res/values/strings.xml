@@ -48,5 +48,9 @@
     <string name="not_received">have not received the code ?</string>
     <string name="resend">Resend</string>
     <string name="hint_input_msg">Type message here</string>
+    <string name="changeOnStatus">By changing your online status to Off your friends will no longer see you online</string>
+    <string name="change_username">Change Username</string>
+    <string name="new_username">New username</string>
+    <string name="logout">Logout</string>
 
 </resources>

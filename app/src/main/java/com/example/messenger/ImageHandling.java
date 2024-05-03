@@ -8,7 +8,8 @@ import java.io.InputStream;
 
 public class ImageHandling {
 
-    public byte[] convertInputStreamToByteArray(InputStream inputStream) throws IOException {
+    // Helper method to convert input stream to byte array
+    static byte[] getBytes(InputStream inputStream) throws IOException {
         ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
         int bufferSize = 1024;
         byte[] buffer = new byte[bufferSize];

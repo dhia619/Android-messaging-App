@@ -77,22 +77,5 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             profile_img = itemView.findViewById(R.id.profile_img);
         }
     }
-    public byte[] getImageBytesFromBase64(String base64Image) {
-        // Decode the Base64 string into a byte array
-        byte[] imageData = Base64.decode(base64Image, Base64.DEFAULT);
-        return imageData;
-    }
-
-    /*
-    // Assuming you have a Base64-encoded image string stored in a variable called base64Image
-    byte[] imageData = getImageBytesFromBase64(base64Image);
-
-    // Convert the byte array to a Bitmap
-    Bitmap bitmap = BitmapFactory.decodeByteArray(imageData, 0, imageData.length);
-
-    // Display the bitmap in an ImageView
-    ImageView imageView = findViewById(R.id.your_image_view_id);
-    imageView.setImageBitmap(bitmap);
-     */
 
 }

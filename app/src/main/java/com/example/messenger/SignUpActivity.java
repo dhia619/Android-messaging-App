@@ -278,7 +278,7 @@ public class SignUpActivity extends AppCompatActivity {
                     try {
                         // Convert the image URI to a byte array
                         InputStream inputStream = getContentResolver().openInputStream(selectedImageUri);
-                        byte[] imageData = getBytes(inputStream);
+                        byte[] imageData = ImageHandling.getBytes(inputStream);
                         // Convert the byte array to a Base64 string
                         String base64Image = Base64.encodeToString(imageData, Base64.DEFAULT);
                         user.setProfile_image(base64Image);
@@ -300,18 +300,6 @@ public class SignUpActivity extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType("image/*");
         startActivityForResult(intent, REQUEST_SELECT_IMAGE);
-    }
-
-    // Helper method to convert input stream to byte array
-    private byte[] getBytes(InputStream inputStream) throws IOException {
-        ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
-        int bufferSize = 1024;
-        byte[] buffer = new byte[bufferSize];
-        int len;
-        while ((len = inputStream.read(buffer)) != -1) {
-            byteBuffer.write(buffer, 0, len);
-        }
-        return byteBuffer.toByteArray();
     }
 
 

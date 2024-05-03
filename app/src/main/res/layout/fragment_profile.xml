@@ -28,9 +28,10 @@
                 android:contentDescription="@string/profile_image"
                 />
             <LinearLayout
+                android:id="@+id/usernameLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="50dp"
+                android:layout_marginTop="20dp"
                 android:background="@drawable/rounded_item"
                 android:padding="15dp">
                 <ImageView
@@ -51,6 +52,7 @@
                     android:layout_marginStart="25dp"/>
             </LinearLayout>
             <LinearLayout
+                android:id="@+id/statusLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -88,6 +90,7 @@
                 </LinearLayout>
             </LinearLayout>
             <LinearLayout
+                android:id="@+id/friendsLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -110,7 +113,30 @@
                     android:textSize="18sp"
                     android:layout_marginStart="25dp"/>
             </LinearLayout>
+            <LinearLayout
+                android:id="@+id/logoutLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/rounded_item"
+                android:padding="15dp">
+                <ImageView
+                    android:layout_width="54dp"
+                    android:layout_height="54dp"
+                    android:src="@mipmap/logout"
+                    android:layout_marginStart="10dp"
+                    android:contentDescription="@string/friends"
+                    />
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/poppins"
+                    android:text="@string/logout"
+                    android:gravity="center_vertical"
+                    android:textSize="18sp"
+                    android:layout_marginStart="25dp"/>
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 

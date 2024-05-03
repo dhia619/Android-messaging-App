@@ -48,8 +48,6 @@ public class discussionsFragment extends Fragment {
         mUsers = new ArrayList<>();
         
         readUsers();
-        
-
         return view;
     }
 
