@@ -27,34 +27,32 @@ import adapter.UserAdapter;
 
 public class discussionsFragment extends Fragment {
 
-
     private RecyclerView recyclerView;
-
     private UserAdapter userAdapter;
     private List<User> mUsers;
-    public discussionsFragment(){
+
+    public discussionsFragment() {
         // require a empty public constructor
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_discussions , container , false);
+        View view = inflater.inflate(R.layout.fragment_discussions, container, false);
 
-        recyclerView = view.findViewById(R.id.recycler_view);
+        recyclerView = view.findViewById(R.id.recycler_view);  // Ensure correct ID
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         mUsers = new ArrayList<>();
-        
+
         readUsers();
         return view;
     }
 
     private void readUsers() {
         final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        DatabaseReference reference = FirebaseDatabase
-                .getInstance("https://messaging-app-d78bd-default-rtdb.europe-west1.firebasedatabase.app/")
+        DatabaseReference reference = FirebaseDatabase.getInstance("https://messaging-app-d78bd-default-rtdb.europe-west1.firebasedatabase.app/")
                 .getReference("users");
         reference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -64,11 +62,17 @@ public class discussionsFragment extends Fragment {
                     User user = snapshot.getValue(User.class);
                     if (user != null) {
                         user.setId(snapshot.getKey());
+                        if (firebaseUser != null && user.getId().equals(firebaseUser.getUid())) {
+                            user.setOnline(true); // Set online attribute to true for the current user locally
+                            // Update online status in the Firebase Realtime Database
+                            DatabaseReference userRef = snapshot.getRef();
+                            userRef.child("online").setValue(true);
+                        }
                         mUsers.add(user);
-
                     }
                 }
 
+                // Update RecyclerView with the updated user list
                 userAdapter = new UserAdapter(getContext(), mUsers);
                 recyclerView.setAdapter(userAdapter);
             }

@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.icu.text.SymbolTable;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +29,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import adapter.UserAdapter;
+
 public class profileFragment extends Fragment {
     private ImageView profile_Image;
     private DatabaseReference usersRef;
@@ -43,9 +46,9 @@ public class profileFragment extends Fragment {
         LinearLayout logoutLay = view.findViewById(R.id.logoutLayout);
 
         TextView usernamelbl = view.findViewById(R.id.usernameView);
+        TextView onofflbl = view.findViewById(R.id.OnOfflbl);
 
         // Initialize intent
-        Intent intent = getActivity().getIntent();
         Bundle bundle = getArguments();
         String userId = "";
         if (bundle != null) {
@@ -55,7 +58,7 @@ public class profileFragment extends Fragment {
                 userId = user.getId();
             }
         }
-        if (userId != "") {
+        if (!TextUtils.isEmpty(userId)) {
             usersRef = FirebaseDatabase.getInstance("https://messaging-app-d78bd-default-rtdb.europe-west1.firebasedatabase.app/")
                     .getReference("users").child(userId);
             usersRef.addValueEventListener(new ValueEventListener() {
@@ -66,6 +69,14 @@ public class profileFragment extends Fragment {
                         usernamelbl.setText(userData.getFull_name());
                         profile_Image = view.findViewById(R.id.profilePicture);
                         String profileImage = userData.getProfile_image();
+                        if(userData.getOnline()){
+                            onofflbl.setText("On");
+                            onofflbl.setTextColor(getResources().getColor(R.color.primary_green));
+                        }
+                        else{
+                            onofflbl.setText("Off");
+                            onofflbl.setTextColor(0xFFFF0000);
+                        }
                         if (profileImage == null || profileImage.isEmpty()) {
                             // If profile image is null or empty, set default image
                             profile_Image.setImageResource(R.mipmap.ic_default_avatar_round);
@@ -134,32 +145,35 @@ public class profileFragment extends Fragment {
         return view;
     }
 
-    DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("users"); // Assuming "users" is the node where user data is stored
-
     // Method to delete user data from Firebase Realtime Database
     private void disconnectUser() {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser != null) {
-            databaseRef = FirebaseDatabase.getInstance("https://messaging-app-d78bd-default-rtdb.europe-west1.firebasedatabase.app/")
-                    .getReference("users");
-            databaseRef.child(currentUser.getUid()).removeValue()
+            DatabaseReference usersRef = FirebaseDatabase.getInstance("https://messaging-app-d78bd-default-rtdb.europe-west1.firebasedatabase.app/").getReference("users");
+            String currentUserId = currentUser.getUid();
+            // Update user's online status to false in the Realtime Database
+            usersRef.child(currentUserId).child("online").setValue(false)
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-                            // Data removed successfully
+                            // Online status updated successfully, now sign out the user
                             FirebaseAuth.getInstance().signOut(); // Sign out the user after disconnecting
-                            Toast.makeText(getContext(), "signed out", Toast.LENGTH_SHORT).show();
-                            // Redirect to sign-in
-                            Intent intent = new Intent(requireActivity(),LoginActivity.class);
+                            if (getContext() != null) {
+                                Toast.makeText(getContext(), "Signed out", Toast.LENGTH_SHORT).show();
+                            }
+                            // Redirect to sign-in activity
+                            Intent intent = new Intent(requireActivity(), LoginActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(intent);
-
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             // Handle failure
+                            if (getContext() != null) {
+                                Toast.makeText(getContext(), "Failed to sign out", Toast.LENGTH_SHORT).show();
+                            }
                         }
                     });
         }

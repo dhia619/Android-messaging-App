@@ -11,6 +11,8 @@ public class User implements Serializable {
     private String birthdate = "";
     private String pwd = "";
 
+    private boolean online = false;
+
 
     public String getId() {
         return id;
@@ -67,5 +69,8 @@ public class User implements Serializable {
     public void setPwd(String pwd) {
         this.pwd = pwd;
     }
+
+    public boolean getOnline(){return online;}
+    public void setOnline(boolean online){this.online = online;}
 
 }

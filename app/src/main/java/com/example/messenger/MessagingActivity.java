@@ -92,7 +92,7 @@ public class MessagingActivity extends AppCompatActivity {
 
         intent = getIntent();
         String userId = intent.getStringExtra("userId");
-        Toast.makeText(this, userId, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, userId, Toast.LENGTH_SHORT).show();
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
 
