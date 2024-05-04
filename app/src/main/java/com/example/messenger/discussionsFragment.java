@@ -72,7 +72,7 @@ public class discussionsFragment extends Fragment {
                             user.setOnline(true); // Set online attribute to true for the current user locally
                             // Update online status in the Firebase Realtime Database
                             DatabaseReference userRef = snapshot.getRef();
-                            userRef.child("online").setValue(true);
+                            userRef.child("online").setValue(user.getOnline());
                         }
                         mUsers.add(user);
                     }

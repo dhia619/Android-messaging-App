@@ -119,6 +119,16 @@
                         android:layout_marginStart="25dp"
                         />
                 </LinearLayout>
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:id="@+id/status_switcher"
+                    android:checked="true"
+                    app:thumbTint="@color/primary_green"
+                    android:layout_marginLeft="120dp"
+                    />
             </LinearLayout>
             <LinearLayout
                 android:id="@+id/friendsLayout"

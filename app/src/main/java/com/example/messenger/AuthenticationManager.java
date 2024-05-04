@@ -53,7 +53,7 @@ public class AuthenticationManager {
                 });
     }
 
-    private void authenticateOffline(String email, String password) {
+    void authenticateOffline(String email, String password) {
         SQLiteDatabase db = mDb.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM user WHERE email = ? AND pwd = ?", new String[]{email, password});
         boolean isAuthenticated = cursor.getCount() > 0;

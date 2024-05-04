@@ -112,16 +112,18 @@
             android:textAllCaps="false"
             android:textSize="16sp"
             android:elevation="15dp"/>
+            <CheckBox
+                android:id="@+id/rememberme"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/remember"
+                android:textColor="@color/white"
+                android:fontFamily="@font/poppins"
+                android:textSize="17sp"
+                android:layout_marginTop="25dp"
+                android:layout_gravity="start"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:text="@string/desc"
-            android:textColor="@color/white"
-            android:fontFamily="@font/poppins"
-            android:textSize="15sp" />
-
+        <!--
         <ImageButton
             android:layout_width="match_parent"
             android:layout_height="60dp"
@@ -130,6 +132,7 @@
             android:contentDescription="@string/image_button_description"
             android:src="@drawable/ic_google"
             android:elevation="10dp"/>
+           -->
         <!-- alternative color text -->
         <LinearLayout
             android:layout_width="wrap_content"
