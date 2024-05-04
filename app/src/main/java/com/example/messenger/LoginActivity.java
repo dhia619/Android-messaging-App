@@ -2,7 +2,6 @@ package com.example.messenger;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -37,6 +36,8 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private User user = new User();
 
+    FirebaseUser firebaseUser;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,22 +60,33 @@ public class LoginActivity extends AppCompatActivity {
         CheckBox rememberme = findViewById(R.id.rememberme);
 
         // Retrieve the stored value of remember me from shared preferences
-        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
-        boolean rememberMeChecked = sharedPreferences.getBoolean("rememberMe", false);
+
+        boolean rememberMeChecked = SharedPreferencesManager.getInstance(getApplicationContext()).getRememberMeChecked();
         rememberme.setChecked(rememberMeChecked);
 
-        if(rememberMeChecked){
+
+        /*if(rememberMeChecked){
             User old_user = localDB.retrieveFirstUser();
             mAuthManager.authenticateOffline(old_user.getEmail(), old_user.getPwd());
-        }
+        }*/
 
         // Check connectivity status
         if (!isDeviceOnline()) {
-            Snackbar.make(findViewById(android.R.id.content), "No internet connection", Snackbar.LENGTH_LONG).show();
+            Snackbar.make(findViewById(android.R.id.content), "No internet connection you cant load Resources", Snackbar.LENGTH_LONG).show();
+        }
+
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        if(firebaseUser != null && rememberMeChecked){
+            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         }
 
 
         // Add OnCheckedChangeListener to remember me checkbox
+        // Assuming sharedPreferences is initialized somewhere in your activity
+        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+
         rememberme.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -84,6 +96,7 @@ public class LoginActivity extends AppCompatActivity {
                 editor.apply();
             }
         });
+
 
         // Redirection to Sign in
         sign_in.setOnClickListener(new View.OnClickListener(){
@@ -195,10 +208,6 @@ public class LoginActivity extends AppCompatActivity {
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             finish(); // Optionally finish LoginActivity to prevent back navigation
             // Insert user data into the local database
-            MyDataBase localDB = new MyDataBase(getApplicationContext());
-            Toast.makeText(this, "i'm gonna delete", Toast.LENGTH_SHORT).show();
-            localDB.deleteAllRows();
-            localDB.insertUser(user);
         } else {
             // Authentication failed, show appropriate message to the user
             Toast.makeText(LoginActivity.this, "Authentication failed", Toast.LENGTH_SHORT).show();

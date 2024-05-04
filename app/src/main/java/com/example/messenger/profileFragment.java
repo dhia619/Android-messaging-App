@@ -1,7 +1,9 @@
 package com.example.messenger;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.icu.text.SymbolTable;
@@ -99,7 +101,7 @@ public class profileFragment extends Fragment {
                         String profileImage = userData.getProfile_image();
                         if(userData.getOnline()){
                             onofflbl.setText("On");
-                            onofflbl.setTextColor(getResources().getColor(R.color.primary_green));
+                            onofflbl.setTextColor(0xFF00FF00);
                         }
                         else{
                             onofflbl.setText("Off");
@@ -179,7 +181,7 @@ public class profileFragment extends Fragment {
         Intent intent = new Intent(requireActivity(), LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
-        /*
+
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser != null) {
             DatabaseReference usersRef = FirebaseDatabase.getInstance("https://messaging-app-d78bd-default-rtdb.europe-west1.firebasedatabase.app/").getReference("users");
@@ -195,6 +197,9 @@ public class profileFragment extends Fragment {
                                 Toast.makeText(getContext(), "Signed out", Toast.LENGTH_SHORT).show();
                             }
                             // Redirect to sign-in activity
+                            SharedPreferencesManager sharedPreferencesManager = SharedPreferencesManager.getInstance(getContext());
+                            sharedPreferencesManager.setRememberMeChecked(false);
+
                             Intent intent = new Intent(requireActivity(), LoginActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(intent);
@@ -209,8 +214,10 @@ public class profileFragment extends Fragment {
                             }
                         }
                     });
-        }*/
+        }
     }
+
+
 
 
 }

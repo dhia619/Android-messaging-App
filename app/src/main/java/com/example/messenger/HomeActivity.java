@@ -5,7 +5,10 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkCapabilities;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,6 +17,7 @@ import android.widget.Toast;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.io.Serializable;
@@ -32,6 +36,11 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+
+        if (!isDeviceOnline()) {
+            Snackbar.make(findViewById(R.id.home_container), "No internet connection you cant load Resources", Snackbar.LENGTH_LONG).show();
+        }
 
         user.setId(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid());
         bundle.putSerializable("user", user);
@@ -72,6 +81,7 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
         int itemId = item.getItemId();
         if (itemId == R.id.discussions) {
             selectedFragment = new discussionsFragment();
+            selectedFragment.setArguments(bundle);
         } else if (itemId == R.id.profile) {
             selectedFragment = new profileFragment();
             selectedFragment.setArguments(bundle);
@@ -86,6 +96,17 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
         // Handle navigation item selection here
         return true; // Return true to indicate that the event was handled
     }
+    private boolean isDeviceOnline() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivityManager != null) {
+            NetworkCapabilities networkCapabilities = connectivityManager.getNetworkCapabilities(connectivityManager.getActiveNetwork());
+            if (networkCapabilities != null) {
+                return networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);
+            }
+        }
+        return false;
+    }
+
 }
 
 

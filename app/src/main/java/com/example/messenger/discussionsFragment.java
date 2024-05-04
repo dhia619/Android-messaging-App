@@ -1,4 +1,7 @@
 package com.example.messenger;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkCapabilities;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.progressindicator.CircularProgressIndicator;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -22,7 +26,10 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.security.cert.PolicyNode;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 import adapter.UserAdapter;
 
@@ -31,6 +38,8 @@ public class discussionsFragment extends Fragment {
     private RecyclerView recyclerView;
     private UserAdapter userAdapter;
     private List<User> mUsers;
+    private User user;
+    String userId = "";
 
 
 
@@ -44,23 +53,36 @@ public class discussionsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_discussions, container, false);
         CircularProgressIndicator progressIndicator;
         progressIndicator = view.findViewById(R.id.home_loader);
+        progressIndicator.setVisibility(View.VISIBLE);
 
         recyclerView = view.findViewById(R.id.recycler_view);  // Ensure correct ID
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         mUsers = new ArrayList<>();
+        Bundle bundle = getArguments();
 
-        readUsers();
+        if (bundle != null) {
+            user = (User) bundle.getSerializable("user");
+            if (user != null) {
+                // Use the user object as needed
+                userId = user.getId();
+            }
+        }
+
+        readUsers(progressIndicator);
+
+
         progressIndicator.setVisibility(View.GONE);
         return view;
     }
 
-    private void readUsers() {
+    private void readUsers( CircularProgressIndicator loader) {
         final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference reference = FirebaseDatabase.getInstance("https://messaging-app-d78bd-default-rtdb.europe-west1.firebasedatabase.app/")
                 .getReference("users");
-        reference.addValueEventListener(new ValueEventListener() {
+
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 mUsers.clear();
@@ -81,6 +103,7 @@ public class discussionsFragment extends Fragment {
                 // Update RecyclerView with the updated user list
                 userAdapter = new UserAdapter(getContext(), mUsers);
                 recyclerView.setAdapter(userAdapter);
+                loader.setVisibility(View.GONE);
             }
 
             @Override

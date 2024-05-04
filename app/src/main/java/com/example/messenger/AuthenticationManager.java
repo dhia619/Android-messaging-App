@@ -45,6 +45,13 @@ public class AuthenticationManager {
                     public void onComplete(Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             FirebaseUser user = mAuth.getCurrentUser();
+                            if (user != null) {
+                                // Insert the user into the local database
+                                User userdb = new User();
+                                userdb.setEmail(email);
+                                userdb.setPwd(password);
+                                mDb.insertUser(userdb);
+                            }
                             ((LoginActivity)mContext).handleAuthenticationResult(true); // Pass authentication result to LoginActivity
                         } else {
                             ((LoginActivity)mContext).handleAuthenticationResult(false); // Pass authentication result to LoginActivity
