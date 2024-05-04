@@ -148,6 +148,11 @@ public class profileFragment extends Fragment {
 
     // Method to delete user data from Firebase Realtime Database
     private void disconnectUser() {
+        // Redirect to sign-in activity
+        Intent intent = new Intent(requireActivity(), LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        /*
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser != null) {
             DatabaseReference usersRef = FirebaseDatabase.getInstance("https://messaging-app-d78bd-default-rtdb.europe-west1.firebasedatabase.app/").getReference("users");
@@ -177,7 +182,7 @@ public class profileFragment extends Fragment {
                             }
                         }
                     });
-        }
+        }*/
     }
 
 

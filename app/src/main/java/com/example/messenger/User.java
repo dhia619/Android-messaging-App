@@ -13,6 +13,14 @@ public class User implements Serializable {
 
     private boolean online = false;
 
+    public User(){
+
+    }
+
+    public User(String email,String pwd){
+        this.email = email;
+        this.pwd = pwd;
+    }
 
     public String getId() {
         return id;
