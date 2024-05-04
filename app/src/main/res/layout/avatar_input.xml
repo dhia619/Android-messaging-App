@@ -9,12 +9,22 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:gravity="center">
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/avatar"
+        <androidx.cardview.widget.CardView
             android:layout_width="150dp"
             android:layout_height="150dp"
-            android:layout_gravity="center"
-            android:src="@drawable/avatar"/>
+            android:id="@+id/avatar_container"
+                app:cardCornerRadius="50dp">
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/avatar"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_gravity="center"
+                    android:scaleType="centerCrop"
+                    android:background="@color/primary_dark"
+                    android:src="@drawable/avatar"/>
+
+        </androidx.cardview.widget.CardView>
+
         <ImageButton
             android:id="@+id/avatarIB"
             android:layout_width="40dp"
@@ -22,7 +32,7 @@
             android:layout_marginTop="-40dp"
             android:layout_marginStart="100dp"
             android:backgroundTintMode="@color/white"
-            android:layout_below="@id/avatar"
+            android:layout_below="@id/avatar_container"
             android:background="@drawable/plus"
             android:contentDescription="@string/image_button_description"
             android:elevation="10dp"/>

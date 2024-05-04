@@ -70,7 +70,13 @@ public class discussionsFragment extends Fragment {
             }
         }
 
-        readUsers(progressIndicator);
+        if (!isDeviceOnline()){
+
+            Toast.makeText(getContext(), "No Internet Connection", Toast.LENGTH_SHORT).show();
+        }else{
+            readUsers(progressIndicator);
+
+        }
 
 
         progressIndicator.setVisibility(View.GONE);
@@ -111,6 +117,16 @@ public class discussionsFragment extends Fragment {
                 // Handle database error
             }
         });
+    }
+    private boolean isDeviceOnline() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) requireContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivityManager != null) {
+            NetworkCapabilities networkCapabilities = connectivityManager.getNetworkCapabilities(connectivityManager.getActiveNetwork());
+            if (networkCapabilities != null) {
+                return networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);
+            }
+        }
+        return false;
     }
 
 }

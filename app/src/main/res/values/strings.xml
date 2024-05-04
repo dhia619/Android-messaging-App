@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ChitChat</string>
+    <string name="app_name">MobiChat</string>
     <string name="Login_Your_Account">Login Your Account</string>
     <string name="email_input">Email Address</string>
     <string name="password_input">Password</string>

@@ -157,7 +157,6 @@ public class MessagingActivity extends AppCompatActivity {
         hashmap.put("receiver", receiver);
         hashmap.put("message", msg);
         hashmap.put("ReceiverImg",ReceiverImg);
-        Toast.makeText(this, ReceiverImg, Toast.LENGTH_SHORT).show();
         reference.child("chats").push().setValue(hashmap);
     }
 

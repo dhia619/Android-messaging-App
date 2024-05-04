@@ -42,7 +42,11 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
             Snackbar.make(findViewById(R.id.home_container), "No internet connection you cant load Resources", Snackbar.LENGTH_LONG).show();
         }
 
-        user.setId(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid());
+        if (isDeviceOnline()){
+            user.setId(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid());
+        }
+
+
         bundle.putSerializable("user", user);
         // Initialize selectedFragment before calling setArguments()
         selectedFragment = new discussionsFragment();
@@ -108,6 +112,3 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
     }
 
 }
-
-
-
