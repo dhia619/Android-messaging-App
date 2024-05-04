@@ -6,6 +6,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".discussionsFragment">
 
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/home_loader"
+        android:indeterminate="true"
+        android:layout_gravity="center"
+        app:indicatorColor="@color/primary_green"
+        app:trackColor="@color/white"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"

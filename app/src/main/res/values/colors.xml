@@ -7,4 +7,5 @@
     <color name="primary_dark">#1a1625</color>
     <color name="placeholder_text_color">#8A9EC3</color>
     <color name="input_background">#1B1927</color>
+    <color name="red">#E72929</color>
 </resources>

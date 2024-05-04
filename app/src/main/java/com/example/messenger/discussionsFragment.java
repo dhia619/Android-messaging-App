@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.firebase.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -31,6 +32,8 @@ public class discussionsFragment extends Fragment {
     private UserAdapter userAdapter;
     private List<User> mUsers;
 
+
+
     public discussionsFragment() {
         // require a empty public constructor
     }
@@ -39,6 +42,8 @@ public class discussionsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_discussions, container, false);
+        CircularProgressIndicator progressIndicator;
+        progressIndicator = view.findViewById(R.id.home_loader);
 
         recyclerView = view.findViewById(R.id.recycler_view);  // Ensure correct ID
         recyclerView.setHasFixedSize(true);
@@ -47,6 +52,7 @@ public class discussionsFragment extends Fragment {
         mUsers = new ArrayList<>();
 
         readUsers();
+        progressIndicator.setVisibility(View.GONE);
         return view;
     }
 

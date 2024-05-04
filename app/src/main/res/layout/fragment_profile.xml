@@ -18,25 +18,40 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:focusable="true">
-            <ImageView
-                android:id="@+id/profilePicture"
+
+            <androidx.cardview.widget.CardView
                 android:layout_width="120dp"
                 android:layout_height="120dp"
-                android:layout_marginTop="30dp"
-                android:src="@drawable/avatar"
                 android:layout_gravity="center"
-                android:contentDescription="@string/profile_image"
-                />
+                android:layout_marginTop="30dp"
+                android:backgroundTint="@color/primary_dark"
+                app:cardCornerRadius="50dp"
+                app:cardElevation="0dp"
+                android:layout_marginBottom="30dp"
+                >
+
+                <ImageView
+                    android:id="@+id/profilePicture"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:layout_gravity="center"
+                    android:src="@drawable/avatar"
+                    android:scaleType="fitXY"
+                    android:contentDescription="@string/profile_image"
+                    />
+            </androidx.cardview.widget.CardView>
+
             <LinearLayout
                 android:id="@+id/usernameLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:background="@drawable/rounded_item"
-                android:padding="15dp">
+                android:padding="10dp">
                 <ImageView
-                    android:layout_width="54dp"
-                    android:layout_height="54dp"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:src="@mipmap/edit"
                     android:layout_marginStart="10dp"
                     android:contentDescription="@string/username"
@@ -50,7 +65,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/username"
-                        android:textSize="18sp"
+                        android:textSize="16sp"
                         android:fontFamily="@font/poppins"
                         android:layout_marginStart="25dp"
                         />
@@ -72,10 +87,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/rounded_item"
-                android:padding="15dp"
+                android:padding="10dp"
                 >
                 <ImageView
-                    android:layout_width="64dp"
+                    android:layout_width="60dp"
                     android:layout_height="match_parent"
                     android:src="@mipmap/active"
                     android:layout_marginStart="10dp"
@@ -89,7 +104,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/active_status"
-                        android:textSize="18sp"
+                        android:textSize="16sp"
                         android:fontFamily="@font/poppins"
                         android:layout_marginStart="25dp"
                         />
@@ -98,7 +113,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/on"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:textColor="@color/primary_green"
                         android:fontFamily="@font/poppins"
                         android:layout_marginStart="25dp"
@@ -111,10 +126,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/rounded_item"
-                android:padding="15dp">
+                android:padding="10dp">
                 <ImageView
-                    android:layout_width="54dp"
-                    android:layout_height="54dp"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:src="@mipmap/add_friend"
                     android:layout_marginStart="10dp"
                     android:contentDescription="@string/friends"
@@ -135,10 +150,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/rounded_item"
-                android:padding="15dp">
+                android:padding="10dp">
                 <ImageView
-                    android:layout_width="54dp"
-                    android:layout_height="54dp"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:src="@mipmap/logout"
                     android:layout_marginStart="10dp"
                     android:contentDescription="@string/friends"
@@ -151,6 +166,7 @@
                     android:text="@string/logout"
                     android:gravity="center_vertical"
                     android:textSize="18sp"
+                    android:textColor="@color/red"
                     android:layout_marginStart="25dp"/>
             </LinearLayout>
         </LinearLayout>
